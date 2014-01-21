@@ -5,9 +5,6 @@ import random
 # Partial differentials
 
 def partial_differential(i,a):
-	global n
-	global m
-
 	if   a == "d/dx":
 		for k1 in range(m-1):
 			for k2 in range(n):
