@@ -28,8 +28,17 @@ def partial_differential(i,a):
 		print("incorrect input")
 
 	return i
-# Определить массив в котором хранить изображение
-# Может состоять из (0...1), (0...255), ([0...255], [0...255], [0...255])
+
+# Convolution of image I with kernel K
+
+def flip(a):
+	return 0
+
+def convolution(i,kernel):
+#		 m   n
+# (k*l)*[x,y] = SUM SUM k[i,j] * l[x-i,y-j]
+#		j=1 i=1
+	return 0
 
 n = 20 #X
 m = 10 #Y
@@ -42,8 +51,6 @@ for k1 in range(m):
 	i.append([])
 	for k2 in range(n):
 		i[k1].append(random.randint(0,1))
-
-# Описать Convolution изображения с ядром k
 
 # Описать частные производные: d/dx, d/dy, d^2/dx^2, d^2/dy^2
 
