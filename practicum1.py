@@ -26,16 +26,25 @@ def partial_differential(i,a):
 
 	return i
 
-# Convolution of image I with kernel K
-
-def flip(a):
-	return 0
+# Full Convolution of image I with kernel K
 
 def convolution(i,kernel):
-#		 m   n
-# (k*l)*[x,y] = SUM SUM k[i,j] * l[x-i,y-j]
-#		j=1 i=1
-	return 0
+	summa = []
+	all_summs = []
+	sum = 0
+	kernel.reverse()
+	for k1 in range(len(i)):
+		for k2 in range(len(kernel)-1):
+			i[k1].insert(0,0)
+			i[k1].append(0)
+		for k2 in range(len(i[k1])-len(kernel)+1):
+			for k3 in range(len(kernel)):
+				sum = kernel[k3]*i[k1][k3+k2] + sum
+			summa.append(sum)
+			sum = 0
+		all_summs.append(summa)
+		summa = []
+	return all_summs
 
 n = 20 #X
 m = 10 #Y
