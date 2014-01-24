@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import random
-import numpy
 
 # Partial differentials
 
@@ -63,9 +62,7 @@ def convolution_two_dimensional(i,kernel):
 					if ((ii >= 0) and (ii < len(i)) and (jj >=0) and (jj < len(i[0]))):
 						sum += i[ii][jj] * kernel[n][m]
 			i2[k1].append(sum)
-	i3 = numpy.array(i2)
-	i3 = i3.T
-	return i3
+	return i2
 
 # Full Convolution of image I with kernel K
 
