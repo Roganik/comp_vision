@@ -58,10 +58,10 @@ def convolution_two_dimensional(i,kernel):
 				n = len(kernel) - 1 - k3
 				for k4 in range(len(kernel[0])):
 					m = len(kernel[0]) - 1 - k4
-					jj = k1 + (k3 - kernel_centerY)
-					ii = k2 + (k4 - kernel_centerX)
+					ii = k1 + (k3 - kernel_centerY)
+					jj = k2 + (k4 - kernel_centerX)
 					if ((ii >= 0) and (ii < len(i)) and (jj >=0) and (jj < len(i[0]))):
-						sum += i[ii][jj] * kernel[m][n]
+						sum += i[ii][jj] * kernel[n][m]
 			i2[k1].append(sum)
 	i3 = numpy.array(i2)
 	i3 = i3.T
