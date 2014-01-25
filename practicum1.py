@@ -102,3 +102,19 @@ for k1 in range(m):
 #		       sharpen, unsharp mask
 
 # Описать интегралл изображения	
+
+if __name__ == "__main__":
+	tutorial2matrix = [[14, 7, 7, 6, 15, 20, 10],
+	                   [14, 9, 13, 11, 2, 20, 2],
+	                   [4, 2, 8, 9, 18, 6, 1],
+	                   [19, 15, 1, 14, 4, 7, 20],
+	                   [20, 2, 17, 10, 10, 3, 6],
+	                   [6, 9, 5, 20, 11, 10, 8],
+	                   [15, 3, 16, 2, 11, 19, 11]]
+	tutorial2kernel1 = [[-1, 1]]
+	tutorial2kernel2 = [[1, 0], [0, 1]]
+	tutorial2kernel3 = [[1, 2, 3], [0, 0, -2], [5, 7, 11], [2, 3, 1]]
+	print "Tutorial 2 convolution"
+	print convolution_two_dimensional(tutorial2matrix, tutorial2kernel1) # :(
+	print convolution_two_dimensional(tutorial2matrix, tutorial2kernel2) # :D
+	print convolution_two_dimensional(tutorial2matrix, tutorial2kernel3) # :'(
