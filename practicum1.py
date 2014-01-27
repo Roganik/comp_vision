@@ -66,6 +66,35 @@ def convolution(image, kernel):
 			image2[y1].append(sum)
 	return np.array(image2)
 
+def morphology_dilation(image, struct_element):
+
+#	image2 = np.array(image) #image2 = image ask question
+	image = np.array(image)
+	image2 = image
+	struct_element = np.array(struct_element)
+	height, width = image.shape
+	height_struct, width_struct = struct_element.shape
+
+	struct_element_centerY = height_struct / 2
+	struct_element_centerX = width_struct / 2
+	print "starting image:"
+	print image
+
+	for y1 in range(height):
+		for x1 in range(width):
+			if (image[y1][x1] == 1):
+				#print "working on x1 =", x1, "y1 = ", y1
+				for y2 in range(height_struct):
+					for x2 in range(width_struct):
+						ii = y1 + y2 - struct_element_centerY
+						jj = x1 + x2 - struct_element_centerX
+						#print "looking at x =", jj, "y =", ii, "when x2 = ", x2, "y2 =", y2
+						if (ii >= 0) and (ii < height) and (jj >=0) and (jj < width):
+							image2[ii][jj] = max(image[ii][jj], struct_element[y2][x2])
+	print "same image after algorythm:"
+	print image
+	return image2
+
 if __name__ == "__main__":
 	tutorial2matrix = [[14, 7, 7, 6, 15, 20, 10],
 	                   [14, 9, 13, 11, 2, 20, 2],
@@ -78,7 +107,30 @@ if __name__ == "__main__":
 	tutorial2kernel1 = [[-1, 1]]
 	tutorial2kernel2 = [[1, 0], [0, 1]]
 	tutorial2kernel3 = [[1, 2, 3], [0, 0, -2], [5, 7, 11], [2, 3, 1]]
-	print "Tutorial 2 convolution"
-	print convolution(tutorial2matrix, tutorial2kernel1),"\n"
-	print convolution(tutorial2matrix, tutorial2kernel2),"\n"
-	print convolution(tutorial2matrix, tutorial2kernel3),"\n"
+#	print "Tutorial 2 convolution"
+#	print convolution(tutorial2matrix, tutorial2kernel1),"\n"
+#	print convolution(tutorial2matrix, tutorial2kernel2),"\n"
+#	print convolution(tutorial2matrix, tutorial2kernel3),"\n"
+
+	tutorial3matrix = [[0, 0, 0, 1, 0, 0, 0],
+			   [0, 0, 1, 0, 1, 0, 0],
+			   [0, 1, 0, 0, 0, 1, 0],
+			   [0, 1, 1, 1, 1, 1, 0],
+			   [0, 1, 0, 0, 0, 1, 0],
+			   [0, 1, 0, 0, 0, 1, 0],
+			   [1, 1, 1, 0, 1, 1, 1]]
+#	print np.array(tutorial3matrix, dtype = bool)
+
+# http://habrahabr.ru/post/113626/
+	habr = [[0,0,0,0,0,0,0,0],
+		[1,1,1,1,1,1,1,0],
+		[0,0,0,1,1,1,1,0],
+		[0,0,0,1,1,1,1,0],
+		[0,0,1,1,1,1,1,0],
+		[0,0,0,1,1,1,1,0],
+		[0,0,1,1,0,0,0,0],
+		[0,0,0,0,0,0,0,0]]
+	habr2 = [[1,1,1],
+		 [1,1,1],
+		 [1,1,1]]
+	morphology_dilation(habr,habr2)
