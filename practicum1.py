@@ -2,6 +2,17 @@
 
 import random
 
+'''
+Google it:
+	* trackbar
+	* hihgui tutorial
+	* Partial differentials
+	* image.shape
+	* tentative numpy tutorial
+	* opencv
+	* scipy
+'''
+
 def partial_differential(i,a):
 	if   a == "d/dx":
 		for k1 in range(m-1):
