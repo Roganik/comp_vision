@@ -66,34 +66,74 @@ def convolution(image, kernel):
 			image2[y1].append(sum)
 	return np.array(image2)
 
+# http://docs.scipy.org/doc/scipy/reference/ndimage.html
+
 def morphology_dilation(image, struct_element):
 
-#	image2 = np.array(image) #image2 = image ask question
 	image = np.array(image)
-	image2 = image
 	struct_element = np.array(struct_element)
+
 	height, width = image.shape
 	height_struct, width_struct = struct_element.shape
 
+	image2 = np.zeros((height,width), dtype = np.int)
+
 	struct_element_centerY = height_struct / 2
 	struct_element_centerX = width_struct / 2
-	print "starting image:"
-	print image
 
 	for y1 in range(height):
 		for x1 in range(width):
 			if (image[y1][x1] == 1):
-				#print "working on x1 =", x1, "y1 = ", y1
 				for y2 in range(height_struct):
 					for x2 in range(width_struct):
 						ii = y1 + y2 - struct_element_centerY
 						jj = x1 + x2 - struct_element_centerX
-						#print "looking at x =", jj, "y =", ii, "when x2 = ", x2, "y2 =", y2
 						if (ii >= 0) and (ii < height) and (jj >=0) and (jj < width):
 							image2[ii][jj] = max(image[ii][jj], struct_element[y2][x2])
-	print "same image after algorythm:"
-	print image
 	return image2
+
+def morphology_erosion(image, struct_element):
+
+	image = np.array(image)
+	struct_element = np.array(struct_element)
+
+	height, width = image.shape
+	height_struct, width_struct = struct_element.shape
+
+	image2 = np.zeros((height,width), dtype = np.int)
+
+	struct_element_centerY = height_struct / 2
+	struct_element_centerX = width_struct / 2
+
+	for y1 in range(height):
+		for x1 in range(width):
+			sum = 0
+			for y2 in range(height_struct):
+				for x2 in range(width_struct):
+					ii = y1 + y2 - struct_element_centerY
+					jj = x1 + x2 - struct_element_centerX
+					if (ii >= 0) and (ii < height) and (jj >=0) and (jj < width):
+						if (image[ii][jj] == struct_element[y2][x2]):
+							sum += 1
+						if (sum == (height_struct * width_struct)):
+							image2[y1][x1] = image[ii][jj]
+						else:
+							image2[y1][x1] = 0
+	return image2
+
+def morphology_opening(image, struct_element):
+
+	image2 = morphology_erosion(image, struct_element)
+	image3 = morphology_dilation(image2, struct_element)
+
+	return image3
+
+def morphology_closing(image, struct_element):
+
+	image2 = morphology_dilation(image, struct_element)
+	image3 = morphology_erosion(image2, struct_element)
+
+	return image3
 
 if __name__ == "__main__":
 	tutorial2matrix = [[14, 7, 7, 6, 15, 20, 10],
@@ -119,18 +159,11 @@ if __name__ == "__main__":
 			   [0, 1, 0, 0, 0, 1, 0],
 			   [0, 1, 0, 0, 0, 1, 0],
 			   [1, 1, 1, 0, 1, 1, 1]]
-#	print np.array(tutorial3matrix, dtype = bool)
+	tutorial3element = [[0, 1, 0],
+			    [0, 0, 1],
+			    [1, 1, 1]]
 
-# http://habrahabr.ru/post/113626/
-	habr = [[0,0,0,0,0,0,0,0],
-		[1,1,1,1,1,1,1,0],
-		[0,0,0,1,1,1,1,0],
-		[0,0,0,1,1,1,1,0],
-		[0,0,1,1,1,1,1,0],
-		[0,0,0,1,1,1,1,0],
-		[0,0,1,1,0,0,0,0],
-		[0,0,0,0,0,0,0,0]]
-	habr2 = [[1,1,1],
-		 [1,1,1],
-		 [1,1,1]]
-	morphology_dilation(habr,habr2)
+	print morphology_dilation(tutorial3matrix, tutorial3element), "\n"
+	print morphology_erosion(tutorial3matrix, tutorial3element), "\n"
+	print morphology_opening(tutorial3matrix, tutorial3element), "\n"
+	print morphology_closing(tutorial3matrix, tutorial3element), "\n"
