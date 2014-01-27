@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
+
 '''
 Google it:
 	* trackbar
@@ -33,29 +35,36 @@ def partial_differential(i,a):
 
 	return i
 
-def convolution(i,kernel):
+def convolution(image, kernel):
 #                m   n
 # (k*l)*[x,y] = SUM SUM k[i,j] * l[x-i,y-j]
-#               j=1 i
-	kernel_centerY = len(kernel) / 2
-	kernel_centerX = len(kernel[0]) / 2
+#               j=1 i=1
+	image = np.array(image)
+	kernel = np.array(kernel)
+
+	height, width = image.shape
+	height_kern, width_kern = kernel.shape
+
+	kernel_centerY = height_kern / 2
+	kernel_centerX = width_kern / 2
+
+	image2 = []
 	sum = 0
 
-	i2 = []
-	for k1 in range(len(i)):
-		i2.append([])
-		for k2 in range(len(i[0])):
+	for y1 in range(height):
+		image2.append([])
+		for x1 in range(width):
 			sum = 0
-			for k3 in range(len(kernel)):
-				n = len(kernel) - 1 - k3
-				for k4 in range(len(kernel[0])):
-					m = len(kernel[0]) - 1 - k4
-					ii = k1 + (k3 - kernel_centerY)
-					jj = k2 + (k4 - kernel_centerX)
-					if ((ii >= 0) and (ii < len(i)) and (jj >=0) and (jj < len(i[0]))):
-						sum += i[ii][jj] * kernel[n][m]
-			i2[k1].append(sum)
-	return i2
+			for y2 in range(height_kern):
+				n = height_kern - 1 - y2
+				for x2 in range(width_kern):
+					m = width_kern - 1 - x2
+					ii = y1 + (y2 - kernel_centerY)
+					jj = x1 + (x2 - kernel_centerX)
+					if ((ii >= 0) and (ii < height) and (jj >=0) and (jj < width)):
+						sum += image[ii][jj] * kernel[n][m]
+			image2[y1].append(sum)
+	return np.array(image2)
 
 if __name__ == "__main__":
 	tutorial2matrix = [[14, 7, 7, 6, 15, 20, 10],
@@ -65,6 +74,7 @@ if __name__ == "__main__":
 	                   [20, 2, 17, 10, 10, 3, 6],
 	                   [6, 9, 5, 20, 11, 10, 8],
 	                   [15, 3, 16, 2, 11, 19, 11]]
+
 	tutorial2kernel1 = [[-1, 1]]
 	tutorial2kernel2 = [[1, 0], [0, 1]]
 	tutorial2kernel3 = [[1, 2, 3], [0, 0, -2], [5, 7, 11], [2, 3, 1]]
