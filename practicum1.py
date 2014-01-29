@@ -136,34 +136,4 @@ def morphology_closing(image, struct_element):
 	return image3
 
 if __name__ == "__main__":
-	tutorial2matrix = [[14, 7, 7, 6, 15, 20, 10],
-	                   [14, 9, 13, 11, 2, 20, 2],
-	                   [4, 2, 8, 9, 18, 6, 1],
-	                   [19, 15, 1, 14, 4, 7, 20],
-	                   [20, 2, 17, 10, 10, 3, 6],
-	                   [6, 9, 5, 20, 11, 10, 8],
-	                   [15, 3, 16, 2, 11, 19, 11]]
-
-	tutorial2kernel1 = [[-1, 1]]
-	tutorial2kernel2 = [[1, 0], [0, 1]]
-	tutorial2kernel3 = [[1, 2, 3], [0, 0, -2], [5, 7, 11], [2, 3, 1]]
-#	print "Tutorial 2 convolution"
-#	print convolution(tutorial2matrix, tutorial2kernel1),"\n"
-#	print convolution(tutorial2matrix, tutorial2kernel2),"\n"
-#	print convolution(tutorial2matrix, tutorial2kernel3),"\n"
-
-	tutorial3matrix = [[0, 0, 0, 1, 0, 0, 0],
-			   [0, 0, 1, 0, 1, 0, 0],
-			   [0, 1, 0, 0, 0, 1, 0],
-			   [0, 1, 1, 1, 1, 1, 0],
-			   [0, 1, 0, 0, 0, 1, 0],
-			   [0, 1, 0, 0, 0, 1, 0],
-			   [1, 1, 1, 0, 1, 1, 1]]
-	tutorial3element = [[0, 1, 0],
-			    [0, 0, 1],
-			    [1, 1, 1]]
-
-	print morphology_dilation(tutorial3matrix, tutorial3element), "\n"
-	print morphology_erosion(tutorial3matrix, tutorial3element), "\n"
-	print morphology_opening(tutorial3matrix, tutorial3element), "\n"
-	print morphology_closing(tutorial3matrix, tutorial3element), "\n"
+	return 0
