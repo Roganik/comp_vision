@@ -135,7 +135,6 @@ def morphology_closing(image, struct_element):
 
 	return image3
 
-# Вычислить частные производные Ix Iy
 
 def partial_derivatives(image, a):
 
@@ -144,7 +143,6 @@ def partial_derivatives(image, a):
     elif a == "dy":
         return convolution(image, [[1],[-1]])
 
-# Вычислить поэлементные произведения: Ix^2, Iy^2, Ixy = Ix * Iy
 
 def element_multiply(image, image2):
 
@@ -161,11 +159,25 @@ def element_multiply(image, image2):
 
 	return image
 
+def harris_corner_detector(image,kernel):
 
+# Вычислить частные производные Ix Iy
+	image_dx = partial_derivatives(image, "dx")
+	image_dy = partial_derivatives(image, "dy")
+
+# Вычислить поэлементные произведения: Ix^2, Iy^2, Ixy = Ix * Iy
+	imageXX = element_multiply(image_dx, image_dx)
+	imageYY = element_multiply(image_dy, image_dy)
+	imageXY = element_multiply(image_dx, image_dy)
 # Выполнить гауссово размытия для полученных матриц
+	s_x = convolution(imageXX, kernel)
+	s_y = convolution(imageYY, kernel)
+	s_xy = convolution(imageXY, kernel)
 # В каждой точке xy определить матрицу
 # Вычислить отклик детектора
 # Применить подавление немаксимумов
 
 if __name__ == "__main__":
-	print 0
+	image = [[1,1]]
+	kernel = [[2,2]]
+	harris_corner_detector(image,kernel)
