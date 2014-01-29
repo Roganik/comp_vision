@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import cv2
 
 '''
 Google it:
@@ -164,7 +165,6 @@ def harris_corner_detector(image,kernel):
 # Вычислить частные производные Ix Iy
 	image_dx = partial_derivatives(image, "dx")
 	image_dy = partial_derivatives(image, "dy")
-
 # Вычислить поэлементные произведения: Ix^2, Iy^2, Ixy = Ix * Iy
 	imageXX = element_multiply(image_dx, image_dx)
 	imageYY = element_multiply(image_dy, image_dy)
@@ -185,7 +185,6 @@ def harris_corner_detector(image,kernel):
 #	     [ s_x  , s_xy ]
 #      	     [ s_xy , s_y  ]
 #    	    ]
-
 # Вычислить отклик детектора
 	for y in range(h):
 		for x in range(w):
@@ -194,10 +193,21 @@ def harris_corner_detector(image,kernel):
 			detector[y][x] = determinant - k * (trace * trace)
 
 # Применить подавление немаксимумов
-
 	return detector
 
 if __name__ == "__main__":
-	image = [[1,1]]
-	kernel = [[2,2]]
-	harris_corner_detector(image,kernel)
+	image = cv2.imread("empire_state.jpg",2)
+	kernel = [[0,1,0],
+		  [1,4,1],
+		  [0,1,0]]
+	const = 0.125
+	kernel = [[x * const for x in y ] for y in kernel]
+	kernel = np.array(kernel)
+
+	print kernel
+
+	image2 = harris_corner_detector(image,kernel)
+	print image2
+	cv2.imshow("1",image)
+	cv2.imshow("2", image2)
+	cv2.waitKey()
