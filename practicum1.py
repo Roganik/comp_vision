@@ -49,13 +49,10 @@ def convolution(image, kernel):
 	kernel_centerY = height_kern / 2
 	kernel_centerX = width_kern / 2
 
-	image2 = []
-	sum = 0
+	image2 = np.zeros((height,width), dtype = np.int)
 
 	for y1 in range(height):
-		image2.append([])
 		for x1 in range(width):
-			sum = 0
 			for y2 in range(height_kern):
 				n = height_kern - 1 - y2
 				for x2 in range(width_kern):
@@ -63,8 +60,7 @@ def convolution(image, kernel):
 					ii = y1 + (y2 - kernel_centerY)
 					jj = x1 + (x2 - kernel_centerX)
 					if ((ii >= 0) and (ii < height) and (jj >=0) and (jj < width)):
-						sum += image[ii][jj] * kernel[n][m]
-			image2[y1].append(sum)
+						image2[y1][x1] += image[ii][jj] * kernel[n][m]
 	return np.array(image2)
 
 # http://docs.scipy.org/doc/scipy/reference/ndimage.html
@@ -160,6 +156,35 @@ def element_multiply(image, image2):
 
 	return image
 
+def corner_response(s_x, s_y, s_xy):
+	h, w = s_x.shape
+        detector = np.zeros((h,w), dtype = np.int)
+        determinant = 0
+        trace = 0
+        k = 0.06 # 0.04 - 0.06
+	for y in range(h):
+		for x in range(w):
+			determinant = s_x[y][x] * s_y[y][x] - s_xy[y][x] * s_xy[y][x]
+			trace = s_x[y][x] + s_y[y][x]
+			detector[y][x] = determinant - k * (trace * trace)
+	return detector
+
+def corner_threshold(image):
+	h, w = image.shape
+
+	for y in range(h):
+		for x in range(w):
+			for i in range(3):
+				for j in range(3):
+					ii = y + i - 1
+					jj = x + j - 1
+					if (ii != y) and (jj != x) and (ii >= 0) and (ii < h) and (jj >= 0) and (jj < w):
+						if (image[ii][jj] > image[y][x]):
+							image[y][x] = 0
+							i = 2
+							j = 2
+	return image
+
 def harris_corner_detector(image,kernel):
 
 # Вычислить частные производные Ix Iy
@@ -174,25 +199,18 @@ def harris_corner_detector(image,kernel):
 	s_y = convolution(imageYY, kernel)
 	s_xy = convolution(imageXY, kernel)
 
-	h, w = s_x.shape
-	detector = np.zeros((h,w), dtype = np.int)
-	determinant = 0
-	trace = 0
-	k = 0.05 # 0.04 - 0.06
-
 # В каждой точке xy определить матрицу
 # 	H = [
 #	     [ s_x  , s_xy ]
 #      	     [ s_xy , s_y  ]
 #    	    ]
+
 # Вычислить отклик детектора
-	for y in range(h):
-		for x in range(w):
-			determinant = s_x[y][x] * s_y[y][x] - s_xy[y][x] * s_xy[y][x]
-			trace = s_x[y][x] + s_y[y][x]
-			detector[y][x] = determinant - k * (trace * trace)
+	detector = corner_response(s_x, s_y, s_xy)
 
 # Применить подавление немаксимумов
+	detector = corner_threshold(detector)
+
 	return detector
 
 if __name__ == "__main__":
@@ -204,10 +222,7 @@ if __name__ == "__main__":
 	kernel = [[x * const for x in y ] for y in kernel]
 	kernel = np.array(kernel)
 
-	print kernel
-
 	image2 = harris_corner_detector(image,kernel)
-	print image2
 	cv2.imshow("1",image)
 	cv2.imshow("2", image2)
 	cv2.waitKey()
