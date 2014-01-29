@@ -173,9 +173,29 @@ def harris_corner_detector(image,kernel):
 	s_x = convolution(imageXX, kernel)
 	s_y = convolution(imageYY, kernel)
 	s_xy = convolution(imageXY, kernel)
+
+	h, w = s_x.shape
+	detector = np.zeros((h,w), dtype = np.int)
+	determinant = 0
+	trace = 0
+	k = 0.05 # 0.04 - 0.06
+
 # В каждой точке xy определить матрицу
+# 	H = [
+#	     [ s_x  , s_xy ]
+#      	     [ s_xy , s_y  ]
+#    	    ]
+
 # Вычислить отклик детектора
+	for y in range(h):
+		for x in range(w):
+			determinant = s_x[y][x] * s_y[y][x] - s_xy[y][x] * s_xy[y][x]
+			trace = s_x[y][x] + s_y[y][x]
+			detector[y][x] = determinant - k * (trace * trace)
+
 # Применить подавление немаксимумов
+
+	return detector
 
 if __name__ == "__main__":
 	image = [[1,1]]
