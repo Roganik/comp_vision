@@ -136,11 +136,36 @@ def morphology_closing(image, struct_element):
 	return image3
 
 # Вычислить частные производные Ix Iy
+
+def partial_derivatives(image, a):
+
+    if a == "dx":
+        return convolution(image, [[1,-1]])
+    elif a == "dy":
+        return convolution(image, [[1],[-1]])
+
 # Вычислить поэлементные произведения: Ix^2, Iy^2, Ixy = Ix * Iy
+
+def element_multiply(image, image2):
+
+        image = np.array(image)
+	image2 = np.array(image2)
+
+        height, width = image.shape
+        height2, width2 = image2.shape
+
+	if (height == height2) and (width == width2):
+		for y in range(height):
+			for x in range(width):
+				image[y][x] *= image2[y][x]
+
+	return image
+
+
 # Выполнить гауссово размытия для полученных матриц
 # В каждой точке xy определить матрицу
 # Вычислить отклик детектора
 # Применить подавление немаксимумов
 
 if __name__ == "__main__":
-	return 0
+	print 0
